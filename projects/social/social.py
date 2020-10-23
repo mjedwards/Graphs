@@ -45,8 +45,18 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for i in range(0, num_users):
+            self.add_user(f"user{i}")
 
         # Create friendships
+        friendships = []
+        for cur_user in self.users:
+            for friend in range(cur_user + 1, self.last_id):
+                friendships.append((cur_user, friend))
+
+        for i in range(num_users * avg_friendships // 2):
+            friendship = friendships[i]
+            self.add_friendship(friendship[0], friendship[i])
 
     def get_all_social_paths(self, user_id):
         """
@@ -57,8 +67,20 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
+        queue = [[user_id]]
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        while len(queue) > 0:
+            cur_user = queue.pop(0)
+            cur_vertex = cur_user[-1]
+
+            if cur_vertex not in visited:
+                visited[cur_vertex] = cur_user
+
+                for n in self.friendships[cur_vertex]:
+                    cur_user_copy = cur_user.copy()
+                    cur_user_copy.append(n)
+                    queue.append(cur_user_copy)
         return visited
 
 
@@ -68,3 +90,9 @@ if __name__ == '__main__':
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+
+
+
+
+
+
